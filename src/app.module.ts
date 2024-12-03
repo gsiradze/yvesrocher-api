@@ -6,6 +6,7 @@ import { typeOrmConfig } from 'config/typeorm.config';
 import configuration from '../config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { IamModule } from './iam/iam.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
       useFactory: typeOrmConfig,
     }),
     UserModule,
+    IamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
