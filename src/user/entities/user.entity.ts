@@ -25,4 +25,7 @@ export class User {
 
   @Column()
   role: string;
+
+  @Column()
+  source: string;
 }
