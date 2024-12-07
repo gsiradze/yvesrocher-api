@@ -29,10 +29,16 @@ export class AuthenticationService {
   async signUp(signUpDto: SignUpDto): Promise<User> {
     try {
       const user = new User();
+      user.firstName = signUpDto.firstName;
+      user.lastName = signUpDto.lastName;
+      user.birthDate = signUpDto.birthDate;
       user.email = signUpDto.email;
       user.password = await this.hashingService.hash(signUpDto.password);
+      user.newsLetters = signUpDto.newsLetters;
+      user.role = signUpDto.role || 'user';
+      user.source = signUpDto.source;
 
-      return this.usersRepository.save(user);
+      return await this.usersRepository.save(user);
     } catch (err) {
       const pgUniqueViolationCode = '23505';
       if (err.code === pgUniqueViolationCode) {
