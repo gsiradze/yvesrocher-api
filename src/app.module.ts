@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from 'config/typeorm.config';
 
-import configuration from '../config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import appConfig from './config/app.config';
+import jwtConfig from './config/jwt.config';
+import redisConfig from './config/redis.config';
+import typeormConfig from './config/typeorm.config';
 import { IamModule } from './iam/iam.module';
 import { UserModule } from './user/user.module';
 
@@ -13,10 +15,13 @@ import { UserModule } from './user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration],
+      load: [appConfig, jwtConfig, redisConfig, typeormConfig],
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: typeOrmConfig,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        configService.get('typeorm'),
     }),
     UserModule,
     IamModule,

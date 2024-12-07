@@ -1,11 +1,16 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/entities';
 import { Repository } from 'typeorm';
+
+import jwtConfig from '@app/config/jwt.config';
+import { User } from '@app/user/entities';
 
 import { HashingService } from '../hashing/hashing.service';
 import { SignInDto } from './dto/sign-in.dto/sign-in.dto';
@@ -16,6 +21,9 @@ export class AuthenticationService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly hashingService: HashingService,
+    private readonly jwtService: JwtService,
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<User> {
@@ -49,7 +57,20 @@ export class AuthenticationService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    // TODO: Implement JWT token generation
-    return true;
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      {
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.ttl,
+      },
+    );
+    return {
+      accessToken,
+    };
   }
 }

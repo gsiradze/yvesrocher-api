@@ -29,7 +29,12 @@ module.exports = {
       'error',
       {
         newlinesBetween: 'always',
-        groups: [['module'], ['parent', 'sibling', 'index']],
+        groups: [
+          ['module', '/^@nestjs/'],
+          ['/^@/'],
+          ['/^src/'],
+          ['parent', 'sibling', 'index'],
+        ],
         alphabetize: { order: 'asc', ignoreCase: true },
       },
     ],
