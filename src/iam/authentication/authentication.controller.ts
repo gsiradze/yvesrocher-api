@@ -3,9 +3,12 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { AuthenticationService } from './authentication.service';
+import { Auth } from './decorators';
 import { SignInDto } from './dto/sign-in.dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto/sign-up.dto';
+import { AuthType } from './enums';
 
+@Auth(AuthType.None)
 @ApiTags('Authentication')
 @Controller('authentication')
 export class AuthenticationController {

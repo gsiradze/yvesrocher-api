@@ -9,7 +9,7 @@ import { User } from '@app/user/entities';
 
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
-import { AccessTokenGuard } from './authentication/guards/access-token';
+import { AuthenticationGuard } from './authentication/guards/authentication';
 import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
 
@@ -26,7 +26,7 @@ import { HashingService } from './hashing/hashing.service';
     },
     {
       provide: APP_GUARD,
-      useClass: AccessTokenGuard,
+      useClass: AuthenticationGuard,
     },
     AuthenticationService,
   ],
