@@ -12,12 +12,12 @@ import { AccessTokenGuard } from '../access-token';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  private static readonly defaultAuthType = AuthType.Bearer;
+  private static readonly defaultAuthType = AuthType.Cookie;
   private readonly authTypeGuardMap: Record<
     AuthType,
     CanActivate | CanActivate[]
   > = {
-    [AuthType.Bearer]: this.accessTokenGuard,
+    [AuthType.Cookie]: this.accessTokenGuard,
     [AuthType.None]: { canActivate: () => true },
   };
 

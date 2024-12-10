@@ -11,16 +11,25 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.useGlobalPipes(new ValidationPipe());
-  app.use(cookieParser);
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle('Yves Rocher')
     .setDescription('The Yves Rocher API description')
     .setVersion('1.0')
+    .addSecurity('cookieAuth', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'access_token',
+    })
     .addTag('yvesrocher')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('api', app, documentFactory(), {
+    swaggerOptions: {
+      withCredentials: true,
+    },
+  });
 
   const port = configService.get('app.port');
   await app.listen(port, () => {

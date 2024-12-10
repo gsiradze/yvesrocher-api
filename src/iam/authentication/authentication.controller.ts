@@ -32,6 +32,12 @@ export class AuthenticationController {
   @ApiResponse({
     status: 200,
     description: 'User has been successfully signed in.',
+    headers: {
+      'Set-Cookie': {
+        description: 'Access token cookie',
+        schema: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({
     status: 401,
@@ -44,6 +50,7 @@ export class AuthenticationController {
     @Body() signInDto: SignInDto,
   ) {
     const accessToken = await this.authService.signIn(signInDto);
+
     response.cookie('access_token', accessToken, {
       secure: true,
       httpOnly: true,
