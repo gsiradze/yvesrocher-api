@@ -1,9 +1,11 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
+import { UserData } from '../interfaces';
+
 export const User = createParamDecorator(
-  (field: string | undefined, ctx: ExecutionContext) => {
+  (field: keyof UserData | undefined, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    const user = request.user;
+    const user: UserData | undefined = request.user;
     return field ? user && user[field] : user;
   },
 );

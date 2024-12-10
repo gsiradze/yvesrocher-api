@@ -17,11 +17,6 @@ async function bootstrap() {
     .setTitle('Yves Rocher')
     .setDescription('The Yves Rocher API description')
     .setVersion('1.0')
-    .addSecurity('cookieAuth', {
-      type: 'apiKey',
-      in: 'cookie',
-      name: 'access_token',
-    })
     .addTag('yvesrocher')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
